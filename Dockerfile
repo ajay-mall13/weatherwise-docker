@@ -1,22 +1,29 @@
-# Stage 1: Build the app and install dependencies
+# Stage 1: Build and install dependencies
 FROM python:3.8-slim AS builder
 
 WORKDIR /app
 
-COPY . /app
+# Copy app files and install dependencies into /app/python
+COPY requirements.txt .
+RUN pip install --no-cache-dir --target=/app/python -r requirements.txt
 
-RUN pip install --no-cache-dir -r requirements.txt --target=/app/deps
+# Copy the full app code last
+COPY . .
 
-# Stage 2: Run the app using a minimal base image
+# Stage 2: Minimal runtime using distroless
 FROM gcr.io/distroless/python3-debian12
 
-COPY --from=builder /app/deps /app/deps
-COPY --from=builder /app .
+# Copy python dependencies and app code from builder
+COPY --from=builder /app/python /app/python
+COPY --from=builder /app /app
 
-ENV PYTHONPATH="/app/deps"
-ENV PYTHONDONTWRITEBYTECODE=1
+# Set environment variables
+ENV PYTHONPATH="/app/python"
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
 
 EXPOSE 8080
 
-CMD ["python", "app.py"]
+CMD ["app.py"]
