@@ -4,9 +4,7 @@ This is a simple, lightweight **frontend weather web application** that fetches 
 
 ---
 
-## 🚀 Live Demo
-
-👉 [http://3.255.242.63:8080/](http://3.255.242.63:8080/)  
+## 
 _(Hosted using Docker on a AWS cloud server)_
 
 ---
