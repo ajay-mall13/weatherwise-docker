@@ -15,7 +15,7 @@ _(Hosted using Docker on a AWS cloud server)_
 
 - 📡 Fetches real-time weather using **OpenWeather API**
 - 🌐 User can enter any city name and view weather instantly
-- ⚙️ Built with vanilla **HTML**, **CSS**, and **JavaScript**
+- ⚙️ Built with vanilla **HTML**, **CSS**, and **python**
 - 🐳 Fully **Dockerized** for consistent deployment
 - 🖥️ Hosted on a **remote Ubuntu server**
 
@@ -26,7 +26,7 @@ _(Hosted using Docker on a AWS cloud server)_
 weather-app/
 ├── index.html # Main UI page
 ├── style.css # Styling
-├── app.py # JavaScript to fetch weather data
+├── app.py 
 └── Dockerfile # Docker setup
 ```
 
