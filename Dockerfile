@@ -1,23 +1,22 @@
-# Use the official Python image as the base image
-FROM python:3.8-alpine
+# Stage 1: Build the app and install dependencies
+FROM python:3.8-slim AS builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the application files first (except large/ignored ones)
 COPY . /app
 
-# Install the required dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --target=/app/deps
 
-# Expose the port that the app runs on
-EXPOSE 8080
+# Stage 2: Run the app using a minimal base image
+FROM gcr.io/distroless/python3-debian12
 
-# Set environment variable to prevent Python from writing .pyc files
+COPY --from=builder /app/deps /app/deps
+COPY --from=builder /app .
+
+ENV PYTHONPATH="/app/deps"
 ENV PYTHONDONTWRITEBYTECODE=1
-
-# Set environment variable to buffer stdout/stderr
 ENV PYTHONUNBUFFERED=1
 
-# Run the Flask app
+EXPOSE 8080
+
 CMD ["python", "app.py"]
